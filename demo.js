@@ -56,7 +56,7 @@ function initPlayers () {
         preload: 'none',
         screenshot: true,
         video: {
-            url: 'https://sina.com-h-sina.com/20180830/15374_5bf00180/index.m3u8',
+            url: 'https://zk.sd-dykj.com/2020/05/04/Irt3RvkOMvllJJ0G/playlist.m3u8',
         }
     });
 
