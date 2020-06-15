@@ -1,0 +1,43 @@
+"use strict";
+var datastorm = datastorm || {};
+
+datastorm.canvas = (function(){
+  var my = {};
+
+  my.width = 1200;
+  my.height = 800;
+
+  var canvas = document.getElementById('mycanvas');
+  my.ctx = canvas.getContext('2d');
+
+  my.ctx.fillStyle = "rgb(0,0,0)";
+  my.ctx.fillRect(0, 0, my.width, my.height);
+
+  my.drawCircle = function(x, y, r) {
+    my.ctx.beginPath();
+    my.ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+    my.ctx.fill();
+  }
+
+  my.drawCircleOutline = function(x, y, r) {
+    my.ctx.beginPath();
+    my.ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+    my.ctx.stroke();
+  }
+
+  my.drawLine = function(x0, y0, x1, y1) {
+    my.ctx.beginPath();
+    my.ctx.moveTo(x0, y0);
+    my.ctx.lineTo(x1, y1);
+    my.ctx.stroke();
+  }
+
+  my.clearCanvas = function() {
+    my.ctx.globalAlpha = 1;
+    my.ctx.shadowBlur = 0;
+    my.ctx.fillStyle = "rgb(0, 0, 0)";
+    my.ctx.fillRect(0, 0, 1200, 800);
+  }
+
+  return my;
+}());
