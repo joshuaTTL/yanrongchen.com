@@ -56,7 +56,7 @@ function initPlayers () {
         preload: 'none',
         screenshot: true,
         video: {
-            url: 'https://youku.com-youku.net/20180603/8985_6e5308f2/index.m3u8',
+            url: 'https://youku.com-youku.net/20180603/8986_800f33a4/index.m3u8',
         }
     });
 
