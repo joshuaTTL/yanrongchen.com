@@ -1,34 +1,763 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>我爱你。</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css">
-    <link rel="stylesheet" href="demo.css">
-    <script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pearplayer"></script>
-    <script src="DPlayer.min.js"></script>
+  <title>Youlong Studio</title>
+  <!-- <meta name = "keywords" content = "海外初中辅导,海外高中辅导,低领留学辅导,学业指导,名校学霸导师" /> -->
+  <!-- <meta name = "description" content = "留美汇多年以来致力于为海外中国学生提供优质学业指导、全方位课程规划，高效利用海外教育资源，培养成就世界的中国精英。" /> -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://npmcdn.com/parse/dist/parse.min.js"></script>
 </head>
 
-<body class="markdown-body">
 
-    <div id="float-dplayer" class="float-dplayer">
-        <div id="dplayer-container" class="dplayer-container"></div>
-        <h3 id="close-dialog" class="close-dialog">X</h3>
+<body>
+
+  <section id="landing-top-section">
+    <div class="container">
+    <div class="row" style="height:auto">
+      <div class="col-md-12 text-center landing-top-section-column">
+        <h1 class="landing-top-title">
+          Youlong Studio
+        </h1>
+        <p class="landing-top-section-p">We create Beauty, in a way.
+        </p>
+        <button id="zixun2" style="margin-bottom:150px; margin-top:60px" data-toggle="modal" href="#myModal"
+          class="button-yellow-center d-lg-none" align="left" @click="startClicked"><b>Contact Us</b></button>
+
+        <button id="zixun2" style="margin-bottom:270px; margin-top:60px; margin-left: auto; margin-right: auto" data-toggle="modal" href="#myModal"
+          class="button-yellow-center d-none d-lg-block text-center" @click="startClicked"><b>Contact Us</b></button>
+      </div>
     </div>
-
-    <h2 id="quick-start">油龙Player</h2>
-    <div class="example">
-        <div id="dplayer1"></div>
     </div>
+  </div>
+  </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/stats.js"></script>
-    <script src="demo.js"></script>
+
+
 </body>
 
+
+
 </html>
+
+<style>
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    color: white;
+    font-weight: lighter;
+    font-size: 15px
+  }
+
+
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 0.7rem !important;
+    padding-right: 0.7rem !important
+  }
+
+  .dropdown-menu {
+    border: 0px !important;
+    border-radius: 0 0 0.5rem 0.5rem !important;
+    margin: .55rem 0 0 !important
+  }
+
+  .peiyou-title {
+    font-weight: normal;
+    font-size: 25px;
+    color: #215E9B !important
+  }
+
+  .navbar {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .nav-item {
+    text-align: right;
+  }
+
+  @media (min-width: 768px) {
+    #landing-top-section {
+      height: 1500px;
+    background-image: url('https://images.squarespace-cdn.com/content/v1/59ca831249fc2bc8bc9ec6e2/1585964659138-DICLQQIG21FXKGIFDSJ8/ke17ZwdGBToddI8pDm48kNiEM88mrzHRsd1mQ3bxVct7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0s0XaMNjCqAzRibjnE_wBlkZ2axuMlPfqFLWy-3Tjp4nKScCHg1XF4aLsQJlo6oYbA/watermountain.jpg?format=1000w');
+    background-size: cover;
+    background-repeat: no-repeat
+  }
+  }
+
+  @media (max-width: 768px) {
+    #landing-top-section {
+      height: 1500px;
+    background-image: url('https://images.squarespace-cdn.com/content/v1/59ca831249fc2bc8bc9ec6e2/1585964659138-DICLQQIG21FXKGIFDSJ8/ke17ZwdGBToddI8pDm48kNiEM88mrzHRsd1mQ3bxVct7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0s0XaMNjCqAzRibjnE_wBlkZ2axuMlPfqFLWy-3Tjp4nKScCHg1XF4aLsQJlo6oYbA/watermountain.jpg?format=1000w');
+    background-size: cover;
+    background-repeat: no-repeat
+  }
+  }
+
+  
+
+  .landing-top-section-p {
+    color: #ffffff;
+    margin-top: 25px;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    /* font-weight: lighter; */
+    letter-spacing: 2.5px;
+    text-align: center
+  }
+
+  .landing-top-section-column {
+    margin-top: 196px;
+
+ 
+    margin-bottom: auto
+  }
+
+  .landing-top-title {
+    font-size: 45px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    text-align: center
+  }
+
+  .landing-description {
+    color: #4A4B4D;
+  }
+
+  .landing-description em {
+    color: #215E9B;
+    font-size: 40px;
+    font-weight: bold
+  }
+
+  .button-yellow-left {
+    width: 200px;
+    height: 41px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #4A4B4D;
+    background-color: #FFE633;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .28);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    float: left;
+    margin-top: 60px;
+  }
+
+  .button-yellow-left:hover {
+    background-color: #F2D81F;
+    /* box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4); */
+    transform: translateY(-3px);
+  }
+
+  .button-yellow-center {
+    width: 200px;
+    height: 41px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: bold;
+    color: #4A4B4D;
+    background-color: #FFE633;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .28);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    margin-top: 60px;
+    margin-bottom: 35px;
+    float: none;
+
+  }
+
+  .button-yellow-center:hover {
+    background-color: #F2D81F;
+    /* box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4); */
+    transform: translateY(-3px);
+  }
+
+  .second-section-column {
+    margin-top: auto;
+    margin-bottom: auto
+  }
+
+  .third-section {
+    background-color: #ECF8FD;
+  }
+
+
+  .third-section-column {
+    /* margin-top: 30px; */
+    margin-bottom: 0px
+  }
+
+  #landing-third-section {
+    background-color: #215E9B;
+    padding-bottom: 20px
+  }
+
+
+  .flag-column {
+    margin-left: auto;
+    margin-right: auto
+  }
+
+  .flags {
+    margin-left: auto;
+    margin-right: auto
+  }
+
+  #landing-fourth-section {
+    padding-top: 100px;
+    padding-bottom: 75px
+  }
+
+  #landing-fifth-section {
+    height: auto;
+    background-color:#215E9B
+  }
+
+  .fifth-title {
+    padding-top: 50px;
+    color: #f7f7f7;
+  }
+
+
+  .ct-btn-scroll {
+    width: 37px;
+    height: 20px;
+    margin: auto;
+
+    z-index: 9;
+    border-radius: 50%;
+    -webkit-transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.25s ease-in-out;
+  }
+
+  img,
+  figure {
+    max-width: 100%;
+  }
+
+  #landing-sixth-section {
+    height: auto
+  }
+
+  #landing-seventh-section {
+    height: auto;
+    background-color: #215E9A;
+
+    padding-top: 50px;
+    padding-bottom: 40px
+  }
+
+  #landing-eighth-section {
+    padding-top:80px;
+    padding-top:80px
+  }
+
+  #eighth-section {
+    background-color: #F9FAFA;
+    height: auto;
+    padding-top: 60px;
+    padding-bottom: 60px
+  }
+
+  #landing-nineth-section {
+    padding-top: 40px;
+    background-color: #215E9B;
+    padding-bottom: 50px
+  }
+
+  #landing-tenth-section {
+    background-color: #ECF8FD;
+    padding-top: 35px;
+    padding-bottom: 70px
+  }
+  
+  #landing-eleventh-section {
+    padding-top: 80px;
+    padding-bottom: 20px
+  }
+
+  #landing-twelfth-section{
+    background-color: #F7F7F7;
+    padding-top:70px;
+    padding-bottom:70px
+  }
+
+  #landing-thirteenth-section {
+    background-image: url('landing131.png');
+    padding-top:80px;
+    padding-bottom: 90px
+  }
+
+  #jiaru-section {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background-image: url("banner-jiaru.png")
+  }
+
+  #liaojie-section {
+    padding-top: 30px;
+    padding-bottom: 50px;
+    background-color: #ECF8FD
+  }
+
+  #ap-hangai {
+    background-color: #2E92BC
+  }
+
+  .dropdown-item {
+    text-align: center;
+    font-size: 15px
+  }
+
+  .dropdown-item:hover {
+    background-color: #FFE633;
+    font-weight: bold
+  }
+
+  .navbar-dark .navbar-nav .nav-link:focus,
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: white;
+    font-weight: bold
+  }
+
+  .icon-bar {
+    background: #215E9B;
+    position: fixed;
+    font-size: 20px;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 1rem;
+    z-index: 3;
+    border-radius: 6px;
+  }
+
+  .icon-bar a {
+    display: block;
+    text-align: center;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 20px;
+
+  }
+
+  .content {
+    margin-left: 75px;
+    font-size: 30px;
+  }
+
+  .white-tooltip+.tooltip>.tooltip-inner {
+    background-color: #73AD21;
+    color: #FFFFFF;
+    border: 1px solid green;
+    padding: 15px;
+    font-size: 20px;
+  }
+
+  ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #979797;
+    opacity: 1;
+    /* Firefox */
+  }
+
+  .close {
+    color: #fff;
+    opacity: 1;
+  }
+
+  @media (min-width: 768px) {
+    .c-sbar__item+.c-sbar__item {
+      border-top: 1px solid rgba(255, 255, 255, 0.2)
+    }
+  }
+
+  @media (max-width: 767px) {
+    .c-sbar__item+.c-sbar__item {
+      border-left: 1px solid rgba(255, 255, 255, 0.2)
+    }
+  }
+
+  /* HIDE RADIO */
+  [type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* IMAGE STYLES */
+  [type=radio]+img {
+    cursor: pointer;
+  }
+
+  .jiazhang[type=radio]+img {
+    background-image: url("jiazhang.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .jiazhang[type=radio]:checked+img {
+    background-image: url("jiazhang-checked.png");
+    background-size: cover
+  }
+
+  .xuesheng[type=radio]+img {
+    background-image: url("xuesheng.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .xuesheng[type=radio]:checked+img {
+    background-image: url("xuesheng-checked.png");
+    background-size: cover
+  }
+
+  .chugaozhong[type=radio]+img {
+    background-image: url("chugaozhong.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .chugaozhong[type=radio]:checked+img {
+    background-image: url("chugaozhong-checked.png");
+    background-size: cover
+  }
+
+  .daxue[type=radio]+img {
+    background-image: url("daxue.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .daxue[type=radio]:checked+img {
+    background-image: url("daxue-checked.png");
+    background-size: cover
+  }
+
+  .qita[type=radio]+img {
+    background-image: url("qita.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .qita[type=radio]:checked+img {
+    background-image: url("qita-checked.png");
+    background-size: cover
+  }
+
+  .jiazhang2[type=radio]+img {
+    background-image: url("jiazhang.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .jiazhang2[type=radio]:checked+img {
+    background-image: url("jiazhang-checked.png");
+    background-size: cover
+  }
+
+  .xuesheng2[type=radio]+img {
+    background-image: url("xuesheng.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .xuesheng2[type=radio]:checked+img {
+    background-image: url("xuesheng-checked.png");
+    background-size: cover
+  }
+
+  .chugaozhong2[type=radio]+img {
+    background-image: url("chugaozhong.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .chugaozhong2[type=radio]:checked+img {
+    background-image: url("chugaozhong-checked.png");
+    background-size: cover
+  }
+
+  .daxue2[type=radio]+img {
+    background-image: url("daxue.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .daxue2[type=radio]:checked+img {
+    background-image: url("daxue-checked.png");
+    background-size: cover
+  }
+
+  .qita2[type=radio]+img {
+    background-image: url("qita.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .qita2[type=radio]:checked+img {
+    background-image: url("qita-checked.png");
+    background-size: cover
+  }
+
+
+  .flip-box {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-color: transparent;
+  width: 264px;
+  height: 360px;
+  perspective: 1000px;
+}
+
+.flip-box-inner {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-box:hover .flip-box-inner {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
+.flip-box-front, .flip-box-back {
+  -webkit-backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.flip-box-front {
+
+
+}
+
+.flip-box-back {
+
+
+  transform: rotateY(180deg);
+}
+
+
+
+  @media (max-width: 767px) {
+    .icon-bar {
+      left: 1rem;
+      bottom: 0.75rem;
+      margin: auto;
+      max-width: 17rem;
+      width: 100%;
+      display: flex
+    }
+
+    .icon-bar a {
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      width: 72px
+    }
+  }
+
+  @media (min-width: 768px) {
+    .icon-bar {
+      top: 47%;
+      padding: 0 0.5rem
+    }
+
+    .icon-bar a {
+      padding-left: 6px;
+      padding-right: 6px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      width: 50px
+    }
+  }
+</style>
+
+<script>
+
+$('.Count1').each(function () {
+  var $this = $(this);
+  jQuery({ Counter: 0 }).animate({ Counter: $this.text() }, {
+    duration: 3000,
+    easing: 'swing',
+    step: function () {
+      $this.text(Math.ceil(this.Counter));
+      if (this.Counter > 2590) {
+        $this.text(2598);
+      }
+    }
+  });
+});
+
+$('.Count2').each(function () {
+  var $this = $(this);
+  jQuery({ Counter: 0 }).animate({ Counter: $this.text() }, {
+    duration: 3000,
+    easing: 'swing',
+    step: function () {
+      $this.text(Math.ceil(this.Counter));
+      if (this.Counter > 47500) {
+        $this.text(48326);
+      }
+    }
+  });
+});
+
+  function test(btn) {
+    var name = document.getElementById("name-input").value;
+    var weixin = document.getElementById("weixin-input").value;
+    var phone = document.getElementById("phone-input").value;
+
+    Parse.initialize('u4qk23ogiy9d9rzluu3lpxufrerwf7lt')
+    Parse.serverURL = 'https://www.liumeihui.com/parse'
+
+    const Inquiry = Parse.Object.extend('Inquiry')
+    const inquiry = new Inquiry()
+
+    if (name == '' || weixin == '' || phone == '') {
+      console.log(name)
+      console.log(weixin)
+      console.log(phone)
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.set('name', name)
+    inquiry.set('weixin', weixin)
+    inquiry.set('phone', phone)
+
+    if (document.getElementById('xuesheng').checked) {
+      inquiry.set('shenfen','学生')
+    } else if (document.getElementById('jiazhang').checked) {
+      inquiry.set('shenfen', '家长')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    if (document.getElementById('chugaozhong').checked) {
+      inquiry.set('nianji','初高中')
+    } else if (document.getElementById('daxue').checked) {
+      inquiry.set('nianji','大学')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.save()
+      .then((info) => {
+        $('#myModal').modal('hide');
+        alert('提交成功！');
+      }, (error) => {
+        alert('提交失败，请稍后再试！');
+
+      })
+
+
+  }
+
+  function test2(btn) {
+    var name = document.getElementById("name-input2").value;
+    var weixin = document.getElementById("weixin-input2").value;
+    var phone = document.getElementById("phone-input2").value;
+
+    Parse.initialize('u4qk23ogiy9d9rzluu3lpxufrerwf7lt')
+    Parse.serverURL = 'https://www.liumeihui.com/parse'
+
+    const Inquiry = Parse.Object.extend('Inquiry')
+    const inquiry = new Inquiry()
+
+    if (name == '' || weixin == '' || phone == '') {
+      console.log(name)
+      console.log(weixin)
+      console.log(phone)
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.set('name', name)
+    inquiry.set('weixin', weixin)
+    inquiry.set('phone', phone)
+
+    if (document.getElementById('xuesheng2').checked) {
+      inquiry.set('shenfen','学生')
+    } else if (document.getElementById('jiazhang2').checked) {
+      inquiry.set('shenfen', '家长')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    if (document.getElementById('chugaozhong2').checked) {
+      inquiry.set('nianji','初高中')
+    } else if (document.getElementById('daxue2').checked) {
+      inquiry.set('nianji','大学')
+    } else if(document.getElementById('qita2')) {
+      inquiry.set('qita', '其他')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.save()
+      .then((info) => {
+        $('#myModal').modal('hide');
+        alert('提交成功！');
+      }, (error) => {
+        alert('提交失败，请稍后再试！');
+
+      })
+
+
+  }
+
+  $(document).ready(function () {
+
+    $('[data-toggle="tooltip"]').tooltip({
+      html: true,
+      placement: 'auto'
+    });
+
+    $("a").on('click', function (event) {
+      if (this.hash !== "") {
+        event.preventDefault();
+        var hash = this.hash;
+        $('html, body').animate({
+          scrollTop: $(hash).offset().top
+        }, 800, function () {
+          window.location.hash = hash;
+        });
+      }
+    });
+  });
+
+</script>
