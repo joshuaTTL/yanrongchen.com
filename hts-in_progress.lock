@@ -1,0 +1,7 @@
+Mirror in progress since Thu, 15 Oct 2020 21:31:03 .. please wait!
+winhttrack https://www.candicecai.me/ -O "/Users/josh/websites/disi" -%v 
+To pause the engine: create an empty file named 'hts-stop.lock'
+PID=29466
+UID=501
+GID=501
+START=1602768663
