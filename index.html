@@ -1,540 +1,765 @@
 <!DOCTYPE html>
-<!--  Last Published: Wed Oct 16 2019 17:27:06 GMT+0000 (UTC)  -->
-<html data-wf-page="59dffe46ad94200001413ce4" data-wf-site="59dffe46ad94200001413ce3">
+<html lang="en">
 
-<!-- Mirrored from cheeyoon.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 23 Oct 2020 08:15:44 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
+  <title>Youlong Studio</title>
   <meta charset="utf-8">
-  <title>Cheeyoon Lee</title>
-  <meta content="ㅊㅇ - Personal site" name="description">
-  <meta content="Cheeyoon Lee" property="og:title">
-  <meta content="ㅊㅇ - Personal site" property="og:description">
-  <meta content="https://i.imgur.com/AxcQRBU.jpg" property="og:image">
-  <meta content="summary" name="twitter:card">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <meta content="pvJimEd8zJ4PY5g7VsxfouWYumXC20fAB3bqD3xY8Kg" name="google-site-verification">
-  <link href="css/normalize.css" rel="stylesheet" type="text/css">
-  <link href="css/components.css" rel="stylesheet" type="text/css">
-  <link href="css/cheeyoon.css" rel="stylesheet" type="text/css">
-  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
-  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
-  <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
-  <link href="images/webclip.png" rel="apple-touch-icon">
-  <script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-108256497-1', 'auto');ga('send', 'pageview');</script>
-  <script src="https://kit.fontawesome.com/1d7d9cafde.js" crossorigin="anonymous"></script>
-  <style>
-  canvas {
-  	position: absolute;
-    top: 0;
-</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://npmcdn.com/parse/dist/parse.min.js"></script>
 </head>
-<body class="body">
-  <div class="canvas w-embed w-script">
-    <script src="https://threejs.org/build/three.min.js"></script>
-    <script src="https://threejs.org/examples/js/WebGL.js"></script>
-    <script type="x-shader/x-vertex" id="vertexshader">
-	attribute float scale;
-	void main() {
-		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-		gl_PointSize = scale * ( 300.0 / - mvPosition.z );
-		gl_Position = projectionMatrix * mvPosition;
-}
-</script>
-    <script type="x-shader/x-fragment" id="fragmentshader">
-	uniform vec3 color;
-	void main() {
-		if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
-		gl_FragColor = vec4( color, 1.0 );
-}
-</script>
-    <script type="module">
-	import * as THREE from 'https://threejs.org/build/three.module.js';
-	var SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
-	var container;
-	var camera, scene, renderer;
-	var particles, count = 0;
-	var mouseX = 0, mouseY = 0;
-	var windowHalfX = window.innerWidth / 2;
-	var windowHalfY = window.innerHeight / 2;
-	init();
-	animate();
-	function init() {
-		container = document.createElement( 'div' );
-		document.body.appendChild( container );
-		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-		camera.position.z = 1000;
-		scene = new THREE.Scene();
-		scene.background = new THREE.Color( 0xffffff );
-		//
-		var numParticles = AMOUNTX * AMOUNTY;
-		var positions = new Float32Array( numParticles * 3 );
-		var scales = new Float32Array( numParticles );
-		var i = 0, j = 0;
-		for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
-			for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
-				positions[ i ] = ix * SEPARATION - ( ( AMOUNTX * SEPARATION ) / 2 ); // x
-				positions[ i + 1 ] = 0; // y
-				positions[ i + 2 ] = iy * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 ); // z
-				scales[ j ] = 1;
-				i += 3;
-				j ++;
-			}
-		}
-		var geometry = new THREE.BufferGeometry();
-		geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-		geometry.addAttribute( 'scale', new THREE.BufferAttribute( scales, 1 ) );
-		var material = new THREE.ShaderMaterial( {
-			uniforms: {
-				color: { value: new THREE.Color( 0x000000 ) },
-			},
-			vertexShader: document.getElementById( 'vertexshader' ).textContent,
-			fragmentShader: document.getElementById( 'fragmentshader' ).textContent
-		} );
-		//
-		particles = new THREE.Points( geometry, material );
-		scene.add( particles );
-		//
-		renderer = new THREE.WebGLRenderer( { antialias: true } );
-		renderer.setPixelRatio( window.devicePixelRatio );
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		container.appendChild( renderer.domElement );
-		document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-		document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-		document.addEventListener( 'touchmove', onDocumentTouchMove, false );
-		//
-		window.addEventListener( 'resize', onWindowResize, false );
-	}
-	function onWindowResize() {
-		windowHalfX = window.innerWidth / 2;
-		windowHalfY = window.innerHeight / 2;
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		renderer.setSize( window.innerWidth, window.innerHeight );
-	}
-	//
-	function onDocumentMouseMove( event ) {
-		mouseX = event.clientX - windowHalfX;
-		mouseY = event.clientY - windowHalfY;
-	}
-	function onDocumentTouchStart( event ) {
-		if ( event.touches.length === 1 ) {
-			event.preventDefault();
-			mouseX = event.touches[ 0 ].pageX - windowHalfX;
-			mouseY = event.touches[ 0 ].pageY - windowHalfY;
-		}
-	}
-	function onDocumentTouchMove( event ) {
-		if ( event.touches.length === 1 ) {
-			event.preventDefault();
-			mouseX = event.touches[ 0 ].pageX - windowHalfX;
-			mouseY = event.touches[ 0 ].pageY - windowHalfY;
-		}
-	}
-	//
-	function animate() {
-		requestAnimationFrame( animate );
-		render();
-	}
-	function render() {
-		camera.position.x += ( mouseX - camera.position.x ) * .05;
-		camera.position.y += ( - mouseY - camera.position.y ) * .05;
-		camera.lookAt( scene.position );
-		var positions = particles.geometry.attributes.position.array;
-		var scales = particles.geometry.attributes.scale.array;
-		var i = 0, j = 0;
-		for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
-			for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
-				positions[ i + 1 ] = ( Math.sin( ( ix + count ) * 0.3 ) * 50 ) +
-				( Math.sin( ( iy + count ) * 0.5 ) * 50 );
-				scales[ j ] = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 8 +
-				( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 8;
-				i += 3;
-				j ++;
-			}
-		}
-		particles.geometry.attributes.position.needsUpdate = true;
-		particles.geometry.attributes.scale.needsUpdate = true;
-		renderer.render( scene, camera );
-		count += 0.1;
-	}
-</script>
-  </div>
-  <div class="home">
-    <div class="topbar w-hidden-main w-container"><img src="images/logo.png" width="35" srcset="images/logo-p-500.png 500w, images/logo.png 722w" sizes="(max-width: 767px) 35px, (max-width: 991px) 40px, 100vw" alt="" class="logo">
-      <div class="icons">
-        <div class="mobileicon w-embed"><a href="mailto:hello@cheeyoon.com" target="_blank"><i class="far fa-envelope" style="color:#000000;"></i></a></div>
-        <div class="mobileicon w-embed"><a href="https://twitter.com/cheeyoon" target="_blank"><i class="fab fa-twitter" style="color:#000000;"></i></a></div>
-        <div class="mobileicon w-embed"><a href="https://instagram.com/cheeyoon" target="_blank"><i class="fab fa-instagram" style="color:#000000;"></i></a></div>
-        <div class="mobileicon w-embed"><a href="https://www.linkedin.com/in/cheeyoon/" target="_blank"><i class="fab fa-linkedin" style="color:#000000;"></i></a></div>
+
+
+<body>
+
+  <section id="landing-top-section">
+    <div class="container">
+    <div class="row" style="height:auto">
+      <div class="col-md-12 text-center landing-top-section-column">
+        <h1 class="landing-top-title">
+          Pineapple Pie
+        </h1>
+
+        <p class="landing-top-section-p">
+        </p>
+        <a href="mailto:yanrongchen5@gmail.com">
+        <button id="zixun2" style="margin-bottom:150px; margin-top:60px"
+          class="button-yellow-center d-lg-none" align="left"><b>Contact Us</b></button>
+        </a>
+        <a href="mailto:yanrongchen5@gmail.com">
+        <button id="zixun2" style="margin-bottom:270px; margin-top:60px; margin-left: auto; margin-right: auto"
+          class="button-yellow-center d-none d-lg-block text-center"><b>Contact Us</b></button>
+        </a>
       </div>
     </div>
-    <div class="topbar w-hidden-medium w-hidden-small w-hidden-tiny w-container">
-      <div class="row w-hidden-small w-hidden-tiny w-row">
-        <div class="w-col w-col-6"><img src="images/logo.png" width="50" srcset="images/logo-p-500.png 500w, images/logo.png 722w" sizes="(max-width: 991px) 100vw, 50px" alt="" class="logo"></div>
-        <div class="w-col w-col-3">
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="far fa-envelope"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a href="mailto:hello@cheeyoon.com?subject=What&#x27;s%20gucci" class="link">hello@cheeyoon.com</a></div>
-          </div>
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="fab fa-twitter"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a target="_blank" href="https://twitter.com/cheeyoon" class="link">@cheeyoon</a></div>
-          </div>
-        </div>
-        <div class="w-col w-col-3">
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="fab fa-instagram"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a target="_blank" href="https://www.instagram.com/cheeyoon/" class="link">@cheeyoon</a></div>
-          </div>
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="fab fa-linkedin"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a target="_blank" href="https://www.linkedin.com/in/cheeyoon/" class="link">/cheeyoon</a></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="intro w-container">
-      <h1 class="h1">I&#x27;m Pojon Xuenuo, a specialized full-stack designer currently working at Microsoft Machine Lerning-Computer Vision application division. <a href="#about" class="link">Learn more</a></h1>
     </div>
   </div>
-  <div id="about" class="section">
-    <div class="content w-container">
-      <h1 class="h1">My background is in <a target="_blank" href="https://sciarc.edu/" class="link big">architecture</a>, but my interests drifted towards technology startups during my academics.<br><br>Recently I cofound <a href="https://kippoapp.com/" target="_blank" class="link big">Kippo</a> and in my free time try to convince my friends to buy a <a href="https://www.tesla.com/referral/cheeyoon75565" target="_blank" class="link big">Tesla</a>.<br><br>Previously I worked on <a href="https://trefleskin.com/" target="_blank" class="link big">Trèfle</a>, organized an AR/VR workshop with <a href="http://aavs.la/" target="_blank" class="link big">AAVSLA</a>, cocreated a design collaborative <a href="https://cheeyoon.github.io/rue/" target="_blank" class="link big">RUE</a>, and cofounded an enterprise SaaS platform <a target="_blank" href="https://web.archive.org/web/20170515110619/https://www.thinkero.us/" class="link big">Thinkerous</a>.</h1>
-      <div class="divider"></div>
-    </div>
-  </div>
-  <div id="koi" class="subsection">
-    <div class="content w-container">
-      <h1 class="h1 heading"><a href="http://www.point.video/" target="_blank" class="link big">Point</a> is the world’s only video production company specializing in market research.</h1>
-    </div>
-  </div>
-  <div class="section gray">
-    <div class="content w-container">
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Project</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">Point Video</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Role</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">Product Designer</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Date</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">November 2017 - April 2018</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Website</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text"><a href="http://www.point.video/" target="_blank" class="link">www.point.video</a></p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Description</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">I was contracted to work on this project as a UI/UX designer along side a small development team <a href="https://uptech.team/" target="_blank" class="link">UpTech</a> for its live streaming platform and landing page. The workflow consisted of Sketch to Zeplin and full front-end web design from start to finish.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-9"><img src="images/macbook.png" srcset="images/macbook-p-500.png 500w, images/macbook-p-800.png 800w, images/macbook-p-1080.png 1080w, images/macbook-p-1600.png 1600w, images/macbook.png 1968w" sizes="(max-width: 767px) 100vw, (max-width: 991px) 562.09375px, 74vw" alt="" class="point_main">
-          <div class="pointvideo">
-            <div class="w-embed"><video playsinline="" autoplay="" loop="" muted="" style="width:auto;height:auto;max-width:100%;max-height:100%;">
- 	<source type="video/mp4" src="https://cheeyoon.github.io/point/videos/livestream.mp4">
-</video></div>
-          </div>
-          <p class="text img">Point&#x27;s live streaming platform had to be simple and intuitive with its core functions easily accessible. The platform had to look sleek and modern for its renown enterprise clients.</p>
-        </div>
-        <div class="column w-col w-col-3">
-          <p class="text">Point was founded by a photo and video journalist. He applied the same documentary storytelling techniques used in the field towards qualitative research and the results spoke for themselves. Clients found that adding video made the research more engaging, easier to share, and quicker to understand.<br><br><strong>The goal</strong> is to give the findings life by making them easy to share and understand - to improve market research with video and a proprietary live streaming platform to broadcast the research.</p><img src="images/webclip.png" width="234" alt="" class="thinkerous_logo">
-          <p class="text halfmobile">The icon is a literary representation of a point resembling a bullseye.</p>
-        </div>
-      </div>
-      <div class="project overflow"><img src="images/point_flow.png" srcset="images/point_flow-p-500.png 500w, images/point_flow-p-800.png 800w, images/point_flow-p-1080.png 1080w, images/point_flow-p-1600.png 1600w, images/point_flow-p-2000.png 2000w, images/point_flow-p-2600.png 2600w, images/point_flow-p-3200.png 3200w, images/point_flow.png 9026w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 94vw, (max-width: 991px) 688px, 100vw" alt="" class="point_flow">
-        <div class="versionblock">
-          <p class="text">I designed for 3 different user flows: master, admin, and client. User experience was each limited to its hierarchy where master can edit admin accounts and activity, admins can edit client accounts and settings, and clients could only join livestreams and chat. Many components and interfaces were shared, while some were account specific for particular actions.<br><br>Master and admin flows only consist of lists and settings so neat tables and modals were important to clearly organize information. Client flow was very visual - they must be able to watch the stream, chat, and download. I structured its design similar to Twitch and Youtube Live.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-clearfix w-col w-col-9"><img src="images/point_color.jpg" width="450" srcset="images/point_color-p-500.jpeg 500w, images/point_color-p-800.jpeg 800w, images/point_color-p-1080.jpeg 1080w, images/point_color.jpg 1430w" sizes="(max-width: 479px) 86vw, (max-width: 991px) 350px, 450px" alt="" class="point_color"></div>
-        <div class="column w-col w-col-3">
-          <p class="text halfmobile right">The platform&#x27;s content was very text heavy so smart use of white space and symbols were crucial for the interface.<br><br>Colors were sparsely used, only to draw attention to specific actions or to distinguish itself from a given context, and modals to highlight important details while hiding everything else to avoid confusion and keep the user focused.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-3">
-          <p class="text">The landing page had to clearly communicate the service and call to action potential clients. In essence, it must follow &quot;why&quot; then &quot;this is what we do&quot; then &quot;here is our social proof&quot;. I also wanted to translate the live stream interface into the landing page to keep the design consistent across the web.<br><br>The one thing that stood out was because Point is a video service, I was able to take advantage of multiple video content to give the page more life than images ever could.</p><img src="images/pointlanding.png" width="772" srcset="images/pointlanding-p-500.png 500w, images/pointlanding.png 1738w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 47vw, (max-width: 991px) 314px, 42vw" alt="" class="point_code"></div>
-        <div class="column w-col w-col-9">
-          <div class="point_landing">
-            <div class="w-embed"><video playsinline="" autoplay="" loop="" muted="" style="width:auto;height:auto;max-width:100%;max-height:100%;">
- 	<source type="video/mp4" src="https://cheeyoon.github.io/point/videos/pointlanding.mov">
-</video></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="eclipse" class="subsection">
-    <div class="content w-container">
-      <h1 class="h1 heading"><a href="#eclipse" class="link big">Eclipse</a> is a simple solar eclipse timer and viewing companion.</h1>
-    </div>
-  </div>
-  <div class="section gray">
-    <div class="content w-container">
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Project</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">Eclipse App</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Role</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">Product Designer</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Date</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">October 2017</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Description</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">This app is in response to a design exercise by <a href="https://www.linkedin.com/in/rappos/" target="_blank" class="link">Bill Rappos</a>, to pitch to the <a href="http://griffithobservatory.org/" target="_blank" class="link">Griffith Observatory</a> an intuitive solar eclipse viewing companion. I was given 24 hours to research, conceptualize, and mock up complete deliverables for current mobile devices.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-6"><img src="images/eclipse_main.png" srcset="images/eclipse_main-p-500.png 500w, images/eclipse_main-p-800.png 800w, images/eclipse_main-p-1080.png 1080w, images/eclipse_main.png 1296w" sizes="(max-width: 479px) 64vw, (max-width: 767px) 66vw, (max-width: 991px) 233.796875px, 31vw" alt="" class="eclipse_main">
-          <p class="text img mobile w-hidden-main">The app had to do one thing well: guide a person how to correctly and safely view the solar eclipse, and accurately identify the contact times.</p>
-        </div>
-        <div class="column w-col w-col-6">
-          <p class="text">There’s a total solar eclipse somewhere on Earth every 18 months or so. From umbraphiles - eclipse chasers that plan their lives around traveling to witness the next total solar eclipse - to laymen that have never witnessed a total solar eclipse before, witnesses are mesmerized when they experience the astronomic phenomenon the right way.<br><br><strong>The goal</strong> was to design an app to help an audience of varying astronomic education to experience this fascinating phenomenon to its fullest potential.</p><img src="images/eclipse_icon.png" width="144" alt="" class="eclipse_logo">
-          <p class="text half">The icon is a flat rendition of a maximum solar eclipse at 100% totality.</p>
-          <p class="text half desktop w-hidden-medium w-hidden-small w-hidden-tiny">The app had to do one thing well: guide a person how to correctly and safely view the solar eclipse, and accurately identify the contact times.</p>
-        </div>
-      </div>
-      <div class="project"><img src="images/eclipse_timer.png" width="1689" srcset="images/eclipse_timer-p-500.png 500w, images/eclipse_timer-p-800.png 800w, images/eclipse_timer-p-1080.png 1080w, images/eclipse_timer-p-1600.png 1600w, images/eclipse_timer-p-2000.png 2000w, images/eclipse_timer-p-2600.png 2600w, images/eclipse_timer.png 3377w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 94vw, (max-width: 991px) 688px, 90vw" alt="" class="eclipse_timer">
-        <div class="screensblock">
-          <p class="text">Eclipse was designed to be very intuitive and simple to use. After allowing the app to use Location Services, the home screen will display a detailed timer of the next solar eclipse in your current location and automatically find coordinates to calculate contact times. The main timer interface displays 4 contact times, max eclipse time, and a countdown for totality.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-9"><img src="images/eclipse_map.png" width="827" srcset="images/eclipse_map-p-500.png 500w, images/eclipse_map-p-800.png 800w, images/eclipse_map-p-1080.png 1080w, images/eclipse_map-p-1600.png 1600w, images/eclipse_map.png 1680w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 94vw, (max-width: 991px) 511px, 67vw" alt="" class="eclipse_map"></div>
-        <div class="column w-col w-col-3">
-          <p class="text halfmobile right">The map page shows the path of totality and a pin of your current location. The map, powered by Google Maps, can pan and zoom, where you can pin any location. Your pinned location info sits on a tray with its relevant visibility and magnitude data, which can be expanded to reveal a detailed overview of the coming event.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-6">
-          <p class="text">All pertinent information about the solar eclipse, current and general, can be found in the info page. Here you can watch an animation of what the eclipse will look like, the shadow path, and numerous helpful tips and safety info on how to view and enjoy the solar eclipse.<br><br>The settings page lets you input a custom location by longitudinal coordinates or address, switch to dark mode which inverts the white background theme to black, and contact and app info.</p><img src="images/eclipse_vid.png" width="640" srcset="images/eclipse_vid-p-500.png 500w, images/eclipse_vid-p-800.png 800w, images/eclipse_vid-p-1080.png 1080w, images/eclipse_vid.png 1280w" sizes="(max-width: 767px) 100vw, (max-width: 991px) 400.796875px, 53vw" alt="" class="eclipse_video"></div>
-        <div class="column w-col w-col-6"><img src="images/eclipse_setting.png" width="839" srcset="images/eclipse_setting-p-500.png 500w, images/eclipse_setting-p-800.png 800w, images/eclipse_setting-p-1080.png 1080w, images/eclipse_setting-p-1600.png 1600w, images/eclipse_setting.png 1704w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 94vw, (max-width: 991px) 334px, 44vw" alt="" class="eclipse_setting"></div>
-      </div>
-    </div>
-  </div>
-  <div id="thinkerous" class="subsection">
-    <div class="content w-container">
-      <h1 class="h1 heading"><a href="https://web.archive.org/web/20170515110619/https://www.thinkero.us/" target="_blank" class="link big">Thinkerous API</a> is an innovation management tool to help identify impactful ideas.</h1>
-    </div>
-  </div>
-  <div class="section gray">
-    <div class="content w-container">
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Project</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">Thinkerous</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Role</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">Product Designer</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Date</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">July 2012 - February 2015</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Website</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text"><a href="https://web.archive.org/web/20170515110619/https://www.thinkero.us/" target="_blank" class="link">www.thinkero.us</a> (archived)</p>
-        </div>
-      </div>
-      <div class="projectinfo w-row">
-        <div class="column w-col w-col-3">
-          <p class="title">Description</p>
-        </div>
-        <div class="column w-col w-col-9">
-          <p class="text">The API was developed during a startup I cofound with <a target="_blank" href="https://www.linkedin.com/in/azhang2/" class="link">Allie Zhang</a> and <a target="_blank" href="https://www.linkedin.com/in/christopher-j-leaf-42a37326/" class="link">Chris Leaf</a>, my first experience leading product design. With the end of Thinkerous, the API was repurposed for a secondary project, SpaceLMS, with an improved interface for the different use case scenario.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-9"><img src="images/thinkerous_main.png" srcset="images/thinkerous_main-p-500.png 500w, images/thinkerous_main-p-800.png 800w, images/thinkerous_main-p-1080.png 1080w, images/thinkerous_main.png 1252w" sizes="(max-width: 767px) 100vw, (max-width: 991px) 511px, 67vw" alt="" class="thinkerous_main">
-          <p class="text img">The design for Thinkerous had to do one thing very well:  display all the viable content clearly and neatly organize the numerous sections. The interface should be intuitive and clean.</p>
-        </div>
-        <div class="column w-col w-col-3">
-          <p class="text">Thinkerous was conceived to create an online platform for communities, such as companies and cities, that are dissatisfied with the lack of collaboration and innovation. Unlike email and other collaborative software, we wanted to provide a structured process for communities to exchange issues and ideas. <br><br><strong>The goal</strong> was to help organizations easily discover their most important problems, and track solutions so that they can be quickly implemented.</p><img src="images/thinkerous_logo.png" width="234" alt="" class="thinkerous_logo">
-          <p class="text halfmobile">The icon was designed to be a clever amalgamation of a thought bubble and a brain.</p>
-        </div>
-      </div>
-      <div class="project"><img src="images/thinkerous_list.png" srcset="images/thinkerous_list-p-500.png 500w, images/thinkerous_list-p-800.png 800w, images/thinkerous_list-p-1080.png 1080w, images/thinkerous_list.png 1556w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 94vw, (max-width: 991px) 688px, 90vw" alt="" class="thinkerous_list">
-        <div class="versionblock">
-          <p class="text">Users can share issues and discuss ideas for solutions which can be voted and prioritized algorithmically in the back-end.<br><br>The earliest iteration (left) was bare minimal with fewer variables. Later iterations made use of trendy visuals with icons, type hierarchy, and a more user friendly approach with clear sorting options.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-clearfix w-col w-col-9"><img src="images/thinkerous_share.png" width="450" srcset="images/thinkerous_share-p-500.png 500w, images/thinkerous_share.png 663w" sizes="(max-width: 479px) 86vw, (max-width: 991px) 350px, 450px" alt="" class="thinkerous_share"></div>
-        <div class="column w-col w-col-3">
-          <p class="text halfmobile right">Sharing and other modals have also been treated with the same design aesthetic. Everything is more vibrant with colors, and designed to make even the most enterprise use cases less intimidating.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-3">
-          <p class="text">After Thinkerous, we decided to use the API to create a different platform, SpaceLMS. This Learning Management System had the same core functions; users share and discuss solutions to problems, so the same design strategy applied. However, I opted for a more subtle, minimal approach this time.<br><br>Softer tones, better use of white space, and overall simplicity gave this a more professional look.</p><img src="images/spacelms_share.png" width="772" srcset="images/spacelms_share-p-500.png 500w, images/spacelms_share-p-800.png 800w, images/spacelms_share-p-1080.png 1080w, images/spacelms_share.png 1544w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 47vw, (max-width: 991px) 314px, 42vw" alt="" class="spacelms_share"></div>
-        <div class="column w-col w-col-9"><img src="images/spacelms.png" width="1355" srcset="images/spacelms-p-500.png 500w, images/spacelms-p-800.png 800w, images/spacelms-p-1080.png 1080w, images/spacelms-p-1600.png 1600w, images/spacelms-p-2000.png 2000w, images/spacelms-p-2600.png 2600w, images/spacelms.png 2710w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 94vw, (max-width: 991px) 511px, 80vw" alt="" class="spacelms_img"></div>
-      </div>
-    </div>
-  </div>
-  <div id="other" class="subsection">
-    <div class="content w-container">
-      <h1 class="h1 heading">Other projects include web design, branding, and photography.</h1>
-    </div>
-  </div>
-  <div class="section gray">
-    <div class="content w-container">
-      <div class="project less w-row">
-        <div class="column w-col w-col-6">
-          <div class="igwidget w-embed w-iframe w-script">
-            <script src="https://lightwidget.com/widgets/lightwidget.js"></script>
-            <iframe src="https://lightwidget.com/widgets/d618f7539a8c55b3b1da87c337ac6f4c.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe></div>
-          <p class="text half">Follow me <a target="_blank" href="https://www.instagram.com/cheeyoon/" class="link">@cheeyoon</a> on Instagram for my photo work. I don&#x27;t publish content often but I do post Stories pretty frequently.</p>
-        </div>
-        <div class="column w-col w-col-6"><img src="images/aavs.png" srcset="images/aavs-p-500.png 500w, images/aavs-p-800.png 800w, images/aavs-p-1080.png 1080w, images/aavs.png 1600w" sizes="(max-width: 767px) 100vw, (max-width: 991px) 400.796875px, 66vw" alt="" class="aavs">
-          <p class="text"><a href="http://aavs.la/" target="_blank" class="link">AAVSLA</a> is an experiment on the duality of “real” and “virtual” and how it can stimulate or promote new senses achieved through visual and ephemeral technologies that can take over portions of the public realm, to expand architecture and urban space into a performance oriented space.<br><br>I designed and built the website, sponsor deck, and helped organize the workshop to guide students to work through the physical, digital, and virtual worlds, as a design, representation, and experience strategy.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-6"><img src="images/brothecary.png" srcset="images/brothecary-p-500.png 500w, images/brothecary-p-800.png 800w, images/brothecary-p-1080.png 1080w, images/brothecary.png 1600w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 94vw, (max-width: 991px) 334px, 66vw" alt="" class="brothecary"></div>
-        <div class="column w-col w-col-6">
-          <p class="text half right">I designed and built the website for <a href="http://brothecary.us/" target="_blank" class="link">Brothecary</a> and produced several product and lifestyle shots for web and print. The site uses Ecwid for its e-commerce needs and utilizes <a href="https://github.com/VincentGarreau/particles.js/" target="_blank" class="link">particles.js</a> with DeviceOrientation for its molecular banner.</p>
-        </div>
-      </div>
-      <div class="project w-row">
-        <div class="column w-col w-col-6">
-          <p class="text">I cofounded and creatively directed Vapour Collective Inc. where we researched and developed <a href="https://cheeyoon.github.io/cloud/" target="_blank" class="link">CLOÚD</a> vapor liquid products. I was responsible for product sourcing and manufacturing; inventory and warehouse shipment scheduling; creative direction and design, branding and marketing; domestic and international distribution.</p><img src="images/cloud_lab.jpg" srcset="images/cloud_lab-p-1080.jpeg 1080w, images/cloud_lab-p-1600.jpeg 1600w, images/cloud_lab.jpg 1788w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 94vw, (max-width: 991px) 334px, 44vw" alt="" class="cloud_lab"></div>
-        <div class="column w-col w-col-6"><img src="images/cloud.jpg" srcset="images/cloud-p-800.jpeg 800w, images/cloud-p-1080.jpeg 1080w, images/cloud-p-1600.jpeg 1600w, images/cloud-p-2000.jpeg 2000w, images/cloud-p-2600.jpeg 2600w, images/cloud.jpg 3024w" sizes="(max-width: 479px) 92vw, (max-width: 767px) 94vw, (max-width: 991px) 334px, 44vw" alt="" class="cloud_bottle"></div>
-      </div>
-      <div class="project top w-row">
-        <div class="column w-col w-col-9 w-col-stack">
-          <div class="rue_video w-embed"><video playsinline="" autoplay="" loop="" muted="" style="width:100%">
- 	<source type="video/mp4" src="https://cheeyoon.github.io/rue/videos/bgvideo-transcode.mp4">
- 	<source type="video/webm" src="https://cheeyoon.github.io/rue/videos/bgvideo-transcode.webm">
-</video></div>
-        </div>
-        <div class="column w-col w-col-3 w-col-stack">
-          <p class="text"><a href="https://cheeyoon.github.io/rue/" target="_blank" class="link">RUE</a> is a design collaborative I co-created with <a href="https://www.linkedin.com/in/tim-cheng-978bb53b/" target="_blank" class="link">Tim Cheng</a>, <a href="https://www.linkedin.com/in/devingharakhanian/" target="_blank" class="link">Devin Gharakhanian</a>, and <a href="https://www.linkedin.com/in/chad-alexander-schram-8834b634/" target="_blank" class="link">Chad Alexander Schram</a>.<br><br>It&#x27;s a hyper-active hothouse incubating emerging creatives with interests in mixed-media, design, and physical/digital technology. This space draws a diverse collective of forward-thinking affiliates that develop in parallel with peers, instigating the notion of &quot;the great group&quot; effect.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="contact" class="section">
-    <div class="content w-container">
-      <h1 class="h1">Thanks for stopping by. If you&#x27;d like to chat, share feedback or inquire about anything, please get in touch.</h1>
-      <div class="divider"></div>
-    </div>
-  </div>
-  <div class="footer">
-    <div class="contact w-hidden-medium w-hidden-small w-hidden-tiny w-container">
-      <div class="row w-hidden-small w-hidden-tiny w-row">
-        <div class="w-col w-col-6"><img src="images/logo.png" width="50" srcset="images/logo-p-500.png 500w, images/logo.png 722w" sizes="(max-width: 991px) 100vw, 50px" alt="" class="logo"></div>
-        <div class="w-col w-col-3">
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="far fa-envelope"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a href="mailto:hello@cheeyoon.com?subject=What&#x27;s%20gucci" class="link">hello@cheeyoon.com</a></div>
-          </div>
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="fab fa-twitter"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a target="_blank" href="https://twitter.com/cheeyoon" class="link">@cheeyoon</a></div>
-          </div>
-        </div>
-        <div class="w-col w-col-3">
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="fab fa-instagram"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a target="_blank" href="https://www.instagram.com/cheeyoon/" class="link">@cheeyoon</a></div>
-          </div>
-          <div class="w-row">
-            <div class="w-col w-col-2">
-              <div class="icon w-embed"><i class="fab fa-linkedin"></i></div>
-            </div>
-            <div class="w-col w-col-10"><a target="_blank" href="https://www.linkedin.com/in/cheeyoon/" class="link">/cheeyoon</a></div>
-          </div>
-        </div>
-      </div>
-      <p class="text copy">This website is set in Akkurat. The particle wave is rendered with three.js. All other content on this website is produced by and copyright 2018 by Cheeyoon Lee. All assets are hosted on Github Pages. Stats are tracked using Google Analytics.</p>
-    </div>
-    <div class="contact w-hidden-main w-container"><img src="images/logo.png" width="35" srcset="images/logo-p-500.png 500w, images/logo.png 722w" sizes="(max-width: 767px) 35px, (max-width: 991px) 40px, 100vw" alt="" class="logo">
-      <div class="icons">
-        <div class="mobileicon w-embed"><a href="mailto:hello@cheeyoon.com" target="_blank"><i class="far fa-envelope" style="color:#000000;"></i></a></div>
-        <div class="mobileicon w-embed"><a href="https://twitter.com/cheeyoon" target="_blank"><i class="fab fa-twitter" style="color:#000000;"></i></a></div>
-        <div class="mobileicon w-embed"><a href="https://instagram.com/cheeyoon" target="_blank"><i class="fab fa-instagram" style="color:#000000;"></i></a></div>
-        <div class="mobileicon w-embed"><a href="https://www.linkedin.com/in/cheeyoon/" target="_blank"><i class="fab fa-linkedin" style="color:#000000;"></i></a></div>
-      </div>
-      <p class="text copy">This website is set in Akkurat. The particle wave is rendered with three.js. All other content on this website is produced by and copyright 2020 by Cheeyoon Lee. All assets are hosted on Github Pages. Stats are tracked using Google Analytics.</p>
-    </div>
-  </div>
-  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script src="js/cheeyoon.js" type="text/javascript"></script>
-  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+  </section>
+
+
+
 </body>
 
-<!-- Mirrored from cheeyoon.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 23 Oct 2020 08:16:11 GMT -->
+
+
 </html>
+
+<style>
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    color: white;
+    font-weight: lighter;
+    font-size: 15px
+  }
+
+
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 0.7rem !important;
+    padding-right: 0.7rem !important
+  }
+
+  .dropdown-menu {
+    border: 0px !important;
+    border-radius: 0 0 0.5rem 0.5rem !important;
+    margin: .55rem 0 0 !important
+  }
+
+  .peiyou-title {
+    font-weight: normal;
+    font-size: 25px;
+    color: #215E9B !important
+  }
+
+  .navbar {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .nav-item {
+    text-align: right;
+  }
+
+  @media (min-width: 768px) {
+    #landing-top-section {
+      height: 1500px;
+    background-image: url('http://img.meteora.xyz/ls.png');
+    background-size: cover;
+    background-repeat: no-repeat
+  }
+  }
+
+  @media (max-width: 768px) {
+    #landing-top-section {
+      height: 1500px;
+    background-image: url('http://img.meteora.xyz/ls.png');
+    background-size: cover;
+    background-repeat: no-repeat
+  }
+  }
+
+  
+
+  .landing-top-section-p {
+    color: #000000;
+    margin-top: 25px;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    /* font-weight: lighter; */
+    letter-spacing: 2.5px;
+    text-align: center
+  }
+
+  .landing-top-section-column {
+    margin-top: 196px;
+
+ 
+    margin-bottom: auto
+  }
+
+  .landing-top-title {
+    font-size: 45px;
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    text-align: center
+  }
+
+  .landing-description {
+    color: #4A4B4D;
+  }
+
+  .landing-description em {
+    color: #215E9B;
+    font-size: 40px;
+    font-weight: bold
+  }
+
+  .button-yellow-left {
+    width: 200px;
+    height: 41px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #4A4B4D;
+    background-color: #FFE633;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .28);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    float: left;
+    margin-top: 60px;
+  }
+
+  .button-yellow-left:hover {
+    background-color: #F2D81F;
+    /* box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4); */
+    transform: translateY(-3px);
+  }
+
+  .button-yellow-center {
+    width: 200px;
+    height: 41px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: bold;
+    color: #4A4B4D;
+    background-color: #FFE633;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .28);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    margin-top: 60px;
+    margin-bottom: 35px;
+    float: none;
+
+  }
+
+  .button-yellow-center:hover {
+    background-color: #F2D81F;
+    /* box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4); */
+    transform: translateY(-3px);
+  }
+
+  .second-section-column {
+    margin-top: auto;
+    margin-bottom: auto
+  }
+
+  .third-section {
+    background-color: #ECF8FD;
+  }
+
+
+  .third-section-column {
+    /* margin-top: 30px; */
+    margin-bottom: 0px
+  }
+
+  #landing-third-section {
+    background-color: #215E9B;
+    padding-bottom: 20px
+  }
+
+
+  .flag-column {
+    margin-left: auto;
+    margin-right: auto
+  }
+
+  .flags {
+    margin-left: auto;
+    margin-right: auto
+  }
+
+  #landing-fourth-section {
+    padding-top: 100px;
+    padding-bottom: 75px
+  }
+
+  #landing-fifth-section {
+    height: auto;
+    background-color:#215E9B
+  }
+
+  .fifth-title {
+    padding-top: 50px;
+    color: #f7f7f7;
+  }
+
+
+  .ct-btn-scroll {
+    width: 37px;
+    height: 20px;
+    margin: auto;
+
+    z-index: 9;
+    border-radius: 50%;
+    -webkit-transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.25s ease-in-out;
+  }
+
+  img,
+  figure {
+    max-width: 100%;
+  }
+
+  #landing-sixth-section {
+    height: auto
+  }
+
+  #landing-seventh-section {
+    height: auto;
+    background-color: #215E9A;
+
+    padding-top: 50px;
+    padding-bottom: 40px
+  }
+
+  #landing-eighth-section {
+    padding-top:80px;
+    padding-top:80px
+  }
+
+  #eighth-section {
+    background-color: #F9FAFA;
+    height: auto;
+    padding-top: 60px;
+    padding-bottom: 60px
+  }
+
+  #landing-nineth-section {
+    padding-top: 40px;
+    background-color: #215E9B;
+    padding-bottom: 50px
+  }
+
+  #landing-tenth-section {
+    background-color: #ECF8FD;
+    padding-top: 35px;
+    padding-bottom: 70px
+  }
+  
+  #landing-eleventh-section {
+    padding-top: 80px;
+    padding-bottom: 20px
+  }
+
+  #landing-twelfth-section{
+    background-color: #F7F7F7;
+    padding-top:70px;
+    padding-bottom:70px
+  }
+
+  #landing-thirteenth-section {
+    background-image: url('landing131.png');
+    padding-top:80px;
+    padding-bottom: 90px
+  }
+
+  #jiaru-section {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background-image: url("banner-jiaru.png")
+  }
+
+  #liaojie-section {
+    padding-top: 30px;
+    padding-bottom: 50px;
+    background-color: #ECF8FD
+  }
+
+  #ap-hangai {
+    background-color: #2E92BC
+  }
+
+  .dropdown-item {
+    text-align: center;
+    font-size: 15px
+  }
+
+  .dropdown-item:hover {
+    background-color: #FFE633;
+    font-weight: bold
+  }
+
+  .navbar-dark .navbar-nav .nav-link:focus,
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: white;
+    font-weight: bold
+  }
+
+  .icon-bar {
+    background: #215E9B;
+    position: fixed;
+    font-size: 20px;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 1rem;
+    z-index: 3;
+    border-radius: 6px;
+  }
+
+  .icon-bar a {
+    display: block;
+    text-align: center;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 20px;
+
+  }
+
+  .content {
+    margin-left: 75px;
+    font-size: 30px;
+  }
+
+  .white-tooltip+.tooltip>.tooltip-inner {
+    background-color: #73AD21;
+    color: #FFFFFF;
+    border: 1px solid green;
+    padding: 15px;
+    font-size: 20px;
+  }
+
+  ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #979797;
+    opacity: 1;
+    /* Firefox */
+  }
+
+  .close {
+    color: #fff;
+    opacity: 1;
+  }
+
+  @media (min-width: 768px) {
+    .c-sbar__item+.c-sbar__item {
+      border-top: 1px solid rgba(255, 255, 255, 0.2)
+    }
+  }
+
+  @media (max-width: 767px) {
+    .c-sbar__item+.c-sbar__item {
+      border-left: 1px solid rgba(255, 255, 255, 0.2)
+    }
+  }
+
+  /* HIDE RADIO */
+  [type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* IMAGE STYLES */
+  [type=radio]+img {
+    cursor: pointer;
+  }
+
+  .jiazhang[type=radio]+img {
+    background-image: url("jiazhang.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .jiazhang[type=radio]:checked+img {
+    background-image: url("jiazhang-checked.png");
+    background-size: cover
+  }
+
+  .xuesheng[type=radio]+img {
+    background-image: url("xuesheng.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .xuesheng[type=radio]:checked+img {
+    background-image: url("xuesheng-checked.png");
+    background-size: cover
+  }
+
+  .chugaozhong[type=radio]+img {
+    background-image: url("chugaozhong.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .chugaozhong[type=radio]:checked+img {
+    background-image: url("chugaozhong-checked.png");
+    background-size: cover
+  }
+
+  .daxue[type=radio]+img {
+    background-image: url("daxue.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .daxue[type=radio]:checked+img {
+    background-image: url("daxue-checked.png");
+    background-size: cover
+  }
+
+  .qita[type=radio]+img {
+    background-image: url("qita.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .qita[type=radio]:checked+img {
+    background-image: url("qita-checked.png");
+    background-size: cover
+  }
+
+  .jiazhang2[type=radio]+img {
+    background-image: url("jiazhang.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .jiazhang2[type=radio]:checked+img {
+    background-image: url("jiazhang-checked.png");
+    background-size: cover
+  }
+
+  .xuesheng2[type=radio]+img {
+    background-image: url("xuesheng.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .xuesheng2[type=radio]:checked+img {
+    background-image: url("xuesheng-checked.png");
+    background-size: cover
+  }
+
+  .chugaozhong2[type=radio]+img {
+    background-image: url("chugaozhong.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .chugaozhong2[type=radio]:checked+img {
+    background-image: url("chugaozhong-checked.png");
+    background-size: cover
+  }
+
+  .daxue2[type=radio]+img {
+    background-image: url("daxue.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .daxue2[type=radio]:checked+img {
+    background-image: url("daxue-checked.png");
+    background-size: cover
+  }
+
+  .qita2[type=radio]+img {
+    background-image: url("qita.png");
+    background-size: cover
+  }
+
+  /* CHECKED STYLES */
+  .qita2[type=radio]:checked+img {
+    background-image: url("qita-checked.png");
+    background-size: cover
+  }
+
+
+  .flip-box {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-color: transparent;
+  width: 264px;
+  height: 360px;
+  perspective: 1000px;
+}
+
+.flip-box-inner {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-box:hover .flip-box-inner {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
+.flip-box-front, .flip-box-back {
+  -webkit-backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.flip-box-front {
+
+
+}
+
+.flip-box-back {
+
+
+  transform: rotateY(180deg);
+}
+
+
+
+  @media (max-width: 767px) {
+    .icon-bar {
+      left: 1rem;
+      bottom: 0.75rem;
+      margin: auto;
+      max-width: 17rem;
+      width: 100%;
+      display: flex
+    }
+
+    .icon-bar a {
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      width: 72px
+    }
+  }
+
+  @media (min-width: 768px) {
+    .icon-bar {
+      top: 47%;
+      padding: 0 0.5rem
+    }
+
+    .icon-bar a {
+      padding-left: 6px;
+      padding-right: 6px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      width: 50px
+    }
+  }
+</style>
+
+<script>
+
+$('.Count1').each(function () {
+  var $this = $(this);
+  jQuery({ Counter: 0 }).animate({ Counter: $this.text() }, {
+    duration: 3000,
+    easing: 'swing',
+    step: function () {
+      $this.text(Math.ceil(this.Counter));
+      if (this.Counter > 2590) {
+        $this.text(2598);
+      }
+    }
+  });
+});
+
+$('.Count2').each(function () {
+  var $this = $(this);
+  jQuery({ Counter: 0 }).animate({ Counter: $this.text() }, {
+    duration: 3000,
+    easing: 'swing',
+    step: function () {
+      $this.text(Math.ceil(this.Counter));
+      if (this.Counter > 47500) {
+        $this.text(48326);
+      }
+    }
+  });
+});
+
+  function test(btn) {
+    var name = document.getElementById("name-input").value;
+    var weixin = document.getElementById("weixin-input").value;
+    var phone = document.getElementById("phone-input").value;
+
+    Parse.initialize('u4qk23ogiy9d9rzluu3lpxufrerwf7lt')
+    Parse.serverURL = 'https://www.liumeihui.com/parse'
+
+    const Inquiry = Parse.Object.extend('Inquiry')
+    const inquiry = new Inquiry()
+
+    if (name == '' || weixin == '' || phone == '') {
+      console.log(name)
+      console.log(weixin)
+      console.log(phone)
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.set('name', name)
+    inquiry.set('weixin', weixin)
+    inquiry.set('phone', phone)
+
+    if (document.getElementById('xuesheng').checked) {
+      inquiry.set('shenfen','学生')
+    } else if (document.getElementById('jiazhang').checked) {
+      inquiry.set('shenfen', '家长')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    if (document.getElementById('chugaozhong').checked) {
+      inquiry.set('nianji','初高中')
+    } else if (document.getElementById('daxue').checked) {
+      inquiry.set('nianji','大学')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.save()
+      .then((info) => {
+        $('#myModal').modal('hide');
+        alert('提交成功！');
+      }, (error) => {
+        alert('提交失败，请稍后再试！');
+
+      })
+
+
+  }
+
+  function test2(btn) {
+    var name = document.getElementById("name-input2").value;
+    var weixin = document.getElementById("weixin-input2").value;
+    var phone = document.getElementById("phone-input2").value;
+
+    Parse.initialize('u4qk23ogiy9d9rzluu3lpxufrerwf7lt')
+    Parse.serverURL = 'https://www.liumeihui.com/parse'
+
+    const Inquiry = Parse.Object.extend('Inquiry')
+    const inquiry = new Inquiry()
+
+    if (name == '' || weixin == '' || phone == '') {
+      console.log(name)
+      console.log(weixin)
+      console.log(phone)
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.set('name', name)
+    inquiry.set('weixin', weixin)
+    inquiry.set('phone', phone)
+
+    if (document.getElementById('xuesheng2').checked) {
+      inquiry.set('shenfen','学生')
+    } else if (document.getElementById('jiazhang2').checked) {
+      inquiry.set('shenfen', '家长')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    if (document.getElementById('chugaozhong2').checked) {
+      inquiry.set('nianji','初高中')
+    } else if (document.getElementById('daxue2').checked) {
+      inquiry.set('nianji','大学')
+    } else if(document.getElementById('qita2')) {
+      inquiry.set('qita', '其他')
+    } else {
+      alert('请输入所有信息！')
+      return
+    }
+
+    inquiry.save()
+      .then((info) => {
+        $('#myModal').modal('hide');
+        alert('提交成功！');
+      }, (error) => {
+        alert('提交失败，请稍后再试！');
+
+      })
+
+
+  }
+
+  $(document).ready(function () {
+
+    $('[data-toggle="tooltip"]').tooltip({
+      html: true,
+      placement: 'auto'
+    });
+
+    $("a").on('click', function (event) {
+      if (this.hash !== "") {
+        event.preventDefault();
+        var hash = this.hash;
+        $('html, body').animate({
+          scrollTop: $(hash).offset().top
+        }, 800, function () {
+          window.location.hash = hash;
+        });
+      }
+    });
+  });
+
+</script>
