@@ -3,34 +3,10 @@
 
 
 @font-face {
-    font-family: 'rooneysansblack';
-    src: url('rooneysansblk-webfont.woff2') format('woff2'),
-         url('rooneysansblk-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansblack_italic';
-    src: url('rooneysansblkit-webfont.woff2') format('woff2'),
-         url('rooneysansblkit-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansbold';
+    font-family: 'rooneysans';
     src: url('rooneysansbold-webfont.woff2') format('woff2'),
          url('rooneysansbold-webfont.woff') format('woff');
-    font-weight: normal;
+    font-weight: bold;
     font-style: normal;
 
 }
@@ -39,103 +15,18 @@
 
 
 @font-face {
-    font-family: 'rooneysansbold_italic';
-    src: url('rooneysansboldit-webfont.woff2') format('woff2'),
-         url('rooneysansboldit-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansheavy';
-    src: url('rooneysanshv-webfont.woff2') format('woff2'),
-         url('rooneysanshv-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansheavy_italic';
-    src: url('rooneysanshvit-webfont.woff2') format('woff2'),
-         url('rooneysanshvit-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansregular_italic';
-    src: url('rooneysansitalic-webfont.woff2') format('woff2'),
-         url('rooneysansitalic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysanslight';
+    font-family: 'rooneysans';
     src: url('rooneysanslight-webfont.woff2') format('woff2'),
          url('rooneysanslight-webfont.woff') format('woff');
-    font-weight: normal;
+    font-weight: lighter;
     font-style: normal;
 
 }
 
 
 
-
 @font-face {
-    font-family: 'rooneysanslight_italic';
-    src: url('rooneysanslightit-webfont.woff2') format('woff2'),
-         url('rooneysanslightit-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansmedium';
-    src: url('rooneysansmedium-webfont.woff2') format('woff2'),
-         url('rooneysansmedium-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansmedium_italic';
-    src: url('rooneysansmediumit-webfont.woff2') format('woff2'),
-         url('rooneysansmediumit-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'rooneysansregular';
+    font-family: 'rooneysans';
     src: url('rooneysansregular-webfont.woff2') format('woff2'),
          url('rooneysansregular-webfont.woff') format('woff');
     font-weight: normal;
